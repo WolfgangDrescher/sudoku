@@ -71,8 +71,7 @@ export class Sudoku {
         return this.cells.every(cell => cell.value);
     }
 
-    solve(ts) {
-        const start = ts || +new Date();
+    solveNext(exit = true) {
 
         /**
          * Methode des nackten Einers
@@ -83,13 +82,17 @@ export class Sudoku {
          * sie die Lösung für dieses Feld. (Nur eine Ziffer verbleibt für die
          * betrachtete Position.)
          */
-        this.cells.filter(c => !c.value).forEach(cell => {
-            const options = this.getCellOptions(cell)
-            if (options.length === 1) {
-                cell.resolved = options[0];
-                this.calcOptions();
+        {
+            const cells = this.cells.filter(c => !c.value);
+            for (let cell of cells) {
+                const options = this.getCellOptions(cell)
+                if (options.length === 1) {
+                    cell.resolved = options[0];
+                    this.calcOptions();
+                    if (exit) return new NakedSingleSolution(cell, cell.resolved);
+                }
             }
-        });
+        }
 
         // solve cells with a single option left
         this.cells.forEach(cell => {
@@ -98,10 +101,6 @@ export class Sudoku {
                 this.calcOptions();
             }
         });
-
-        if(!this.isSolved && +new Date() - start < 1000) {
-            this.solve(start);
-        }
     }
 
     static getBlockNumber(row, col) {
@@ -135,3 +134,12 @@ class Cell {
         return [1, 2, 3, 4, 5, 6, 7, 8, 9];
     }
 }
+
+class Solution {
+    constructor(cell, value) {
+        this.cell = typeof toRaw !== 'undefined' ? toRaw(cell) : cell;
+        this.value = value;
+    }
+}
+
+class NakedSingleSolution extends Solution {}

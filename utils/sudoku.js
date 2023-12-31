@@ -130,6 +130,39 @@ export class Sudoku {
             }
         }
 
+        /**
+         * Naked Pair
+         */
+        for (let unitNumber = 1; unitNumber <= 9; unitNumber++) {
+            const unitCells = [
+                ['row', this.getRow(unitNumber)],
+                ['col', this.getCol(unitNumber)],
+                ['block', this.getBlock(unitNumber)],
+            ];
+            for (let [type, cells] of unitCells) {
+                const emptyCells = cells.filter(c => !c.value);
+                for (let cell of emptyCells) {
+                    const options = this.getCellOptions(cell);
+                    if (options.length === 2) {
+                        const cellsWithSameOptions = emptyCells.filter(c => !(c.row === cell.row && c.col === cell.col) && arraysEqual(options, this.getCellOptions(c)))
+                        if (cellsWithSameOptions.length === 1) {
+                            const cellsToRemoveOptions = emptyCells.filter((emptyCell) => {
+                                return emptyCell.id !== cell.id && emptyCell.id !== cellsWithSameOptions[0].id && emptyCell.options.some(o => options.includes(o));
+                            });
+                            if (cellsToRemoveOptions.length > 0) {
+                                cellsToRemoveOptions.forEach(c => {
+                                    options.forEach(o => {
+                                        c.removeOption(o);
+                                    });
+                                });
+                                if (exit) return new NakedPairSolution(type, unitNumber, cell, cellsWithSameOptions[0], options);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
         // solve cells with a single option left
         this.cells.filter(c => !c.value).forEach(cell => {
             const options = this.getCellOptions(cell);
@@ -207,4 +240,13 @@ class HiddenSingleSolution extends Solution {
     }
 }
 
-class HiddenSingleSolution extends Solution {}
+class NakedPairSolution extends Solution {
+    constructor(type, unitNumber, cell1, cell2, options) {
+        super();
+        this.type = type;
+        this.unitNumber = unitNumber;
+        this.cell1 = Solution.toRaw(cell1);
+        this.cell2 = Solution.toRaw(cell2);
+        this.options = options;
+    }
+}

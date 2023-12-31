@@ -22,7 +22,9 @@ const displayHighlightNumber = computed(() => {
             'border-b-4 border-b-gray-300': cell.row % 3 === 0 && cell.row < 9,
             'border-r-4 border-r-gray-300': cell.col % 3 === 0 && cell.col < 9,
         }">
-            <div class="text-6xl">
+            <div class="text-6xl" :class="{
+                'font-bold': cell.value === cell.given,
+            }">
                 {{ cell.value }}
             </div>
             <div class="absolute w-full h-full">

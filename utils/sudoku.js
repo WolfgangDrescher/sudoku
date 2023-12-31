@@ -78,7 +78,7 @@ export class Sudoku {
         }
 
         /**
-         * Methode des nackten Einers
+         * Naked Single
          *
          * Hierbei wählt man zunächst ein Feld aus. Für dieses werden alle
          * Ziffern ausgeschlossen, die in derselben Einheit (Zeile, Spalte oder
@@ -99,7 +99,7 @@ export class Sudoku {
         }
 
         /**
-         * Methode des versteckten Einers
+         * Hidden Single
          *
          * Bei dieser Methode betrachtet man eine Einheit (Zeile, Spalte oder
          * Block) und eine Ziffer, die noch nicht in dieser Einheit eingetragen

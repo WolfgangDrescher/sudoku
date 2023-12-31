@@ -24,6 +24,7 @@ const displayHighlightNumber = computed(() => {
         }">
             <div class="text-6xl" :class="{
                 'font-bold': cell.value === cell.given,
+                'text-blue-500': cell.value === cell.resolved,
             }">
                 {{ cell.value }}
             </div>

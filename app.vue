@@ -7,6 +7,11 @@ const sudoku = ref(new Sudoku(expert));
 
 const highlightNumber = ref(null);
 const showOptions = ref(false);
+
+function solveNext() {
+    const result = sudoku.value.solveNext();
+    console.log(result);
+}
 </script>
 
 <template>
@@ -32,7 +37,7 @@ const showOptions = ref(false);
                 Show Options: <input type="checkbox" v-model="showOptions">
             </div>
             <div>
-                <button @click="sudoku.solve()">Solve</button>
+                <button @click="solveNext">Solve next</button>
             </div>
         </div>
     </div>

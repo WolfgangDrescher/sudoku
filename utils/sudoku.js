@@ -109,13 +109,13 @@ export class Sudoku {
          * werden kann, ohne dass sie in einer anderen Einheit mehrfach
          * vorkommt, wird sie in dieses Feld eingetragen.
          */
-        for (let select = 1; select <= 9; select++) {
+        for (let unitNumber = 1; unitNumber <= 9; unitNumber++) {
             const unitCells = [
-                this.getRow(select),
-                this.getCol(select),
-                this.getBlock(select),
+                ['row', this.getRow(unitNumber)],
+                ['col', this.getCol(unitNumber)],
+                ['block', this.getBlock(unitNumber)],
             ];
-            for (let cells of unitCells) {
+            for (let [type, cells] of unitCells) {
                 const values = this.getValues(cells);
                 const options = Cell.createOptions().filter(v => !values.includes(v));
                 const emptyCells = cells.filter(c => !c.value);
@@ -124,7 +124,7 @@ export class Sudoku {
                     if (cellsWithOption.length === 1) {
                         cellsWithOption[0].resolved = option;
                         this.calcOptions();
-                        if (exit) return new HiddenSingleSolution(cellsWithOption[0], cellsWithOption[0].resolved);
+                        if (exit) return new HiddenSingleSolution(type, unitNumber, cellsWithOption[0], cellsWithOption[0].resolved);
                     }
                 }
             }
@@ -184,12 +184,24 @@ class Cell {
 }
 
 class Solution {
+    static toRaw(value) {
+        return typeof toRaw !== 'undefined' ? toRaw(value) : value;
+    }
+}
+
+class NakedSingleSolution extends Solution {
     constructor(cell, value) {
-        this.cell = typeof toRaw !== 'undefined' ? toRaw(cell) : cell;
+        this.cell = Solution.toRaw(cell);
         this.value = value;
     }
 }
 
-class NakedSingleSolution extends Solution {}
+class HiddenSingleSolution extends Solution {
+    constructor(type, unitNumber, cell, value) {
+        super(cell, value);
+        this.type = type;
+        this.unitNumber = unitNumber;
+    }
+}
 
 class HiddenSingleSolution extends Solution {}

@@ -75,7 +75,7 @@ export class Sudoku {
         // solve cells with a single option left
         this.cells.forEach(cell => {
             if (cell.options.length === 1) {
-                cell.value = cell.options[0];
+                cell.resolved = cell.options[0];
                 this.calcOptions();
             }
         });
@@ -93,6 +93,7 @@ export class Sudoku {
 class Cell {
     constructor(value, col, row) {
         this.input = null;
+        this.resolved = null;
         this.given = value.match(/^\d$/) ? parseInt(value, 10) : null;
         this.row = row;
         this.col = col;
@@ -100,11 +101,7 @@ class Cell {
     }
 
     get value() {
-        return this.given || this.input || null;
-    }
-
-    set value(value) {
-        return this.given = value;
+        return this.given || this.input || this.resolved || null;
     }
 
     get block() {

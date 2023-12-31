@@ -94,6 +94,38 @@ export class Sudoku {
             }
         }
 
+        /**
+         * Methode des versteckten Einers
+         *
+         * Bei dieser Methode betrachtet man eine Einheit (Zeile, Spalte oder
+         * Block) und eine Ziffer, die noch nicht in dieser Einheit eingetragen
+         * ist. Da jede Ziffer in einer Einheit genau einmal vorkommt, muss sie
+         * in eines der freien Felder eingetragen werden. Falls es nur noch ein
+         * freies Feld in dieser Einheit gibt, in die die Ziffer eingetragen
+         * werden kann, ohne dass sie in einer anderen Einheit mehrfach
+         * vorkommt, wird sie in dieses Feld eingetragen.
+         */
+        for (let select = 1; select <= 9; select++) {
+            const unitCells = [
+                this.getRow(select),
+                this.getCol(select),
+                this.getBlock(select),
+            ];
+            for (let cells of unitCells) {
+                const values = this.getValues(cells);
+                const options = Cell.createOptions().filter(v => !values.includes(v));
+                const emptyCells = cells.filter(c => !c.value);
+                for (let option of options) {
+                    const cellsWithOption = emptyCells.filter(cell => this.getCellOptions(cell).includes(option))
+                    if (cellsWithOption.length === 1) {
+                        cellsWithOption[0].resolved = option;
+                        this.calcOptions();
+                        if (exit) return new HiddenSingleSolution(cellsWithOption[0], cellsWithOption[0].resolved);
+                    }
+                }
+            }
+        }
+
         // solve cells with a single option left
         this.cells.forEach(cell => {
             if (cell.options.length === 1) {
@@ -151,3 +183,5 @@ class Solution {
 }
 
 class NakedSingleSolution extends Solution {}
+
+class HiddenSingleSolution extends Solution {}

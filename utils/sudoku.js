@@ -103,6 +103,14 @@ export class Sudoku {
         });
     }
 
+    solve(ts) {
+        const start = ts || Date.now();
+        this.solveNext(false);
+        if (!this.isSolved && Date.now() - start < 3000) {
+            this.solve(start);
+        }
+    }
+
     static getBlockNumber(row, col) {
         return Math.floor((row - 1) / 3) * 3 + Math.floor((col - 1) / 3) + 1;
     }

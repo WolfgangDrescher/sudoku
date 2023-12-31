@@ -43,6 +43,10 @@ export class Sudoku {
         return cells;
     }
 
+    getValues(cells) {
+        return cells.map(c => c.value).filter(c => c);
+    }
+
     rowHasNumber(row, num) {
         return this.getRow(row).map(c => c.value).includes(num);
     }
@@ -53,6 +57,14 @@ export class Sudoku {
 
     blockHasNumber(block, num) {
         return this.getBlock(block).map(c => c.value).includes(num);
+    }
+
+    getCellOptions(cell) {
+        const rowValues = this.getValues(this.getRow(cell.row));
+        const colValues = this.getValues(this.getCol(cell.col));
+        const blockValues = this.getValues(this.getBlock(cell.block));
+        const values = [...new Set([...rowValues, ...colValues, ...blockValues])]; // Set not needed here
+        return Cell.createOptions().filter(v => !values.includes(v));
     }
 
     get isSolved() {
@@ -73,11 +85,7 @@ export class Sudoku {
          */
         this.cells.forEach(cell => {
             if (!cell.value) {
-                const rowValues = this.getRow(cell.row).map(c => c.value).filter(c => c);
-                const colValues = this.getCol(cell.col).map(c => c.value).filter(c => c);
-                const blockValues = this.getBlock(cell.block).map(c => c.value).filter(c => c);
-                const values = [...new Set([...rowValues, ...colValues, ...blockValues])]; // Set not needed here
-                const options = Cell.createOptions().filter(v => !values.includes(v));
+                const options = this.getCellOptions(cell)
                 if (options.length === 1) {
                     cell.resolved = options[0];
                     this.calcOptions();

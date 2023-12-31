@@ -3,7 +3,7 @@ export class Sudoku {
         this.str = str;
         this.cells = [];
         str.split('').forEach((value, index) => {
-            this.cells.push(new Cell(value, (index % 9) + 1, Math.floor(index / 9) + 1));
+            this.cells.push(new Cell(index + 1, value, (index % 9) + 1, Math.floor(index / 9) + 1));
         });
         this.calcOptions();
     }
@@ -156,7 +156,8 @@ export class Sudoku {
 }
 
 class Cell {
-    constructor(value, col, row) {
+    constructor(id, value, col, row) {
+        this.id = id;
         this.input = null;
         this.resolved = null;
         this.given = value.match(/^\d$/) ? parseInt(value, 10) : null;

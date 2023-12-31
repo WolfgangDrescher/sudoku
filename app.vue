@@ -12,6 +12,10 @@ function solveNext() {
     const result = sudoku.value.solveNext();
     console.log(result);
 }
+
+function solve() {
+    sudoku.value.solve();
+}
 </script>
 
 <template>
@@ -38,6 +42,9 @@ function solveNext() {
             </div>
             <div>
                 <button @click="solveNext">Solve next</button>
+            </div>
+            <div>
+                <button @click="solve">Solve</button>
             </div>
         </div>
     </div>

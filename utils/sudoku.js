@@ -73,6 +73,10 @@ export class Sudoku {
 
     solveNext(exit = true) {
 
+        if (this.isSolved) {
+            throw new Error('Sudoku is already solved');
+        }
+
         /**
          * Methode des nackten Einers
          *

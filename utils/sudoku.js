@@ -83,13 +83,11 @@ export class Sudoku {
          * sie die Lösung für dieses Feld. (Nur eine Ziffer verbleibt für die
          * betrachtete Position.)
          */
-        this.cells.forEach(cell => {
-            if (!cell.value) {
-                const options = this.getCellOptions(cell)
-                if (options.length === 1) {
-                    cell.resolved = options[0];
-                    this.calcOptions();
-                }
+        this.cells.filter(c => !c.value).forEach(cell => {
+            const options = this.getCellOptions(cell)
+            if (options.length === 1) {
+                cell.resolved = options[0];
+                this.calcOptions();
             }
         });
 

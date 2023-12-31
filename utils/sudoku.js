@@ -61,15 +61,28 @@ export class Sudoku {
 
     solve(ts) {
         const start = ts || +new Date();
-    
-        // Methode des nackten Einers
+
+        /**
+         * Methode des nackten Einers
+         *
+         * Hierbei wählt man zunächst ein Feld aus. Für dieses werden alle
+         * Ziffern ausgeschlossen, die in derselben Einheit (Zeile, Spalte oder
+         * Block) bereits stehen. Wenn nur noch eine Ziffer möglich bleibt, ist
+         * sie die Lösung für dieses Feld. (Nur eine Ziffer verbleibt für die
+         * betrachtete Position.)
+         */
         this.cells.forEach(cell => {
-            const rowValues = this.getRow(cell.row).map(c => c.value).filter(c => c);
-            const colValues = this.getCol(cell.col).map(c => c.value).filter(c => c);
-            const blockValues = this.getBlock(cell.block).map(c => c.value).filter(c => c);
-            const values = [...new Set([...rowValues, ...colValues, ...blockValues])]; // Set not needed here
-            const options = Cell.createOptions().filter(v => !values.includes(v));
-            console.log(cell.row, cell.col, values, options);
+            if (!cell.value) {
+                const rowValues = this.getRow(cell.row).map(c => c.value).filter(c => c);
+                const colValues = this.getCol(cell.col).map(c => c.value).filter(c => c);
+                const blockValues = this.getBlock(cell.block).map(c => c.value).filter(c => c);
+                const values = [...new Set([...rowValues, ...colValues, ...blockValues])]; // Set not needed here
+                const options = Cell.createOptions().filter(v => !values.includes(v));
+                if (options.length === 1) {
+                    cell.resolved = options[0];
+                    this.calcOptions();
+                }
+            }
         });
 
         // solve cells with a single option left

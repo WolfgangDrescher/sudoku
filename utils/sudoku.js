@@ -191,6 +191,7 @@ class Solution {
 
 class NakedSingleSolution extends Solution {
     constructor(cell, value) {
+        super();
         this.cell = Solution.toRaw(cell);
         this.value = value;
     }
@@ -198,9 +199,11 @@ class NakedSingleSolution extends Solution {
 
 class HiddenSingleSolution extends Solution {
     constructor(type, unitNumber, cell, value) {
-        super(cell, value);
+        super();
         this.type = type;
         this.unitNumber = unitNumber;
+        this.cell = Solution.toRaw(cell);
+        this.value = value;
     }
 }
 

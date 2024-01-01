@@ -142,7 +142,7 @@ export class Sudoku {
             for (let [type, cells] of unitCells) {
                 const emptyCells = cells.filter(c => !c.value);
                 for (let cell of emptyCells) {
-                    const options = this.getCellOptions(cell);
+                    const options = this.getCellOptions(cell); // cell.options
                     if (options.length === 2) {
                         const cellsWithSameOptions = emptyCells.filter(c => !(c.row === cell.row && c.col === cell.col) && arraysEqual(options, this.getCellOptions(c)))
                         if (cellsWithSameOptions.length === 1) {

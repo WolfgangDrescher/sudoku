@@ -35,7 +35,7 @@ const displayHighlightNumber = computed(() => {
                     <div v-if="colHasNumber && highlightNumber !== cell.value" class="h-full bg-red-500/30 w-1 absolute left-1/2 -translate-x-1/2"></div>
                     <div v-if="highlightNumber === cell.value" class="w-3/4 h-3/4 border-4 border-red-500/30 rounded-full absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"></div>
                 </template>
-                <div v-if="showOptions" class="grid grid-cols-3">
+                <div v-if="showOptions && !cell.value" class="grid grid-cols-3">
                     <div v-for="n in 9" class="aspect-w-1 aspect-h-1">
                         <div class="w-full h-full flex items-center justify-center" :class="{
                             'text-red-500': !cell.options.includes(n),

@@ -163,14 +163,18 @@ export class Sudoku {
             }
         }
 
-        // solve cells with a single option left
-        this.cells.filter(c => !c.value).forEach(cell => {
-            const options = this.getCellOptions(cell);
-            if (options.length === 1) {
-                cell.resolved = options[0];
-                this.calcOptions();
+        // solve cells with only one option left
+        {
+            const cells = this.cells.filter(c => !c.value);
+            for (let cell of cells) {
+                if (cell.options.length === 1) {
+                    cell.resolved = cell.options[0];
+                    this.calcOptions();
+                    if (exit) return new SingleOptionsLeftSolution(cell, cell.resolved);
+
+                }
             }
-        });
+        }
 
         if (exit) {
             throw new Error('This seems to be a difficult Sudoku. No other number could be found with any existing algorithm.');
@@ -231,6 +235,15 @@ class NakedSingleSolution extends Solution {
         this.value = value;
     }
 }
+
+class SingleOptionsLeftSolution extends Solution {
+    constructor(cell, value) {
+        super();
+        this.cell = Solution.toRaw(cell);
+        this.value = value;
+    }
+}
+
 
 class HiddenSingleSolution extends Solution {
     constructor(type, unitNumber, cell, value) {

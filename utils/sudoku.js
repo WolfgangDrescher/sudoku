@@ -172,7 +172,9 @@ export class Sudoku {
             }
         });
 
-        throw new Error('This seems to be a difficult Sudoku. No other number could be found with any existing algorithm.');
+        if (exit) {
+            throw new Error('This seems to be a difficult Sudoku. No other number could be found with any existing algorithm.');
+        }
     }
 
     solve(ts) {

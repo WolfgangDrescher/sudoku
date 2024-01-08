@@ -13,6 +13,7 @@ const diabolical = '8...6...9.2..4..8....1.9.....1...4..46......5..5.9.6....95.6
 const sudoku = ref(new Sudoku(expert));
 
 const highlightNumber = ref(null);
+const highlightNakedSingle = ref(true);
 const showOptions = ref(false);
 
 function solveNext() {
@@ -41,6 +42,7 @@ function validate() {
                 v-for="col in 9"
                 :cell="sudoku.getCell(row, col)"
                 :highlight-number="highlightNumber"
+                :highlight-naked-single="highlightNakedSingle && sudoku.getCell(row, col).options.length === 1"
                 :row-has-number="sudoku.rowHasNumber(row, highlightNumber)"
                 :col-has-number="sudoku.colHasNumber(col, highlightNumber)"
                 :block-has-number="sudoku.blockHasNumber(Sudoku.getBlockNumber(row, col), highlightNumber)"
@@ -54,16 +56,19 @@ function validate() {
                 Highlight Number: <input v-model.number="highlightNumber" />
             </div>
             <div>
-                Show Options: <input type="checkbox" v-model="showOptions">
+                Hightlight naked single: <input type="checkbox" v-model="highlightNakedSingle">
             </div>
             <div>
-                <button @click="solveNext">Solve next</button>
+                Show Options: <input type="checkbox" v-model="showOptions">
             </div>
             <div>
                 <button @click="resetOptions">Reset options</button>
             </div>
             <div>
                 <button @click="validate">Validate</button>
+            </div>
+            <div>
+                <button @click="solveNext">Solve next</button>
             </div>
             <div>
                 <button @click="solve">Solve</button>

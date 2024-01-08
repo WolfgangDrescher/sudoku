@@ -163,6 +163,52 @@ export class Sudoku {
             }
         }
 
+        /**
+         * Locked Candidate
+         */
+        {
+            const compareMap = {
+                row: ['col', 'block'],
+                col: ['row', 'block'],
+                block: ['row', 'col'],
+            };
+            for (let unitNumber = 1; unitNumber <= 9; unitNumber++) {
+                const unitCells = [
+                    ['row', this.getRow(unitNumber)],
+                    ['col', this.getCol(unitNumber)],
+                    ['block', this.getBlock(unitNumber)],
+                ];
+                for (let [type, cells] of unitCells) {
+                    for (let option = 1; option <= 9; option++) {
+                        const cellsWithOption = cells.filter(c => !c.value).filter(cell => this.getCellOptions(cell).includes(option));
+                        if (cellsWithOption.length) {
+                            for (let property of compareMap[type]) {
+                                const uniqueValues = [...new Set(cellsWithOption.map(cell => cell[property]))];
+                                if (uniqueValues.length === 1) {
+                                    const houseNumber = uniqueValues[0];
+                                    const getterFn = `get${property[0].toUpperCase()}${property.substring(1)}`;
+                                    const emptyHouseCells = this[getterFn](houseNumber).filter(c => !c.value);
+                                    for (let cell of emptyHouseCells) {
+                                        if (cell[type] !== unitNumber) {
+                                            if (this.getCellOptions(cell).includes(option)) { // cell.options
+                                                // cell.removeOption(option);
+                                                const filteredOptions = this.getCellOptions(cell).filter(o => o !== option);
+                                                if (filteredOptions.length === 1) {
+                                                    cell.resolved = filteredOptions[0];
+                                                    this.calcOptions();
+                                                    if (exit) return new LockedCandidateSolution(cell, filteredOptions[0], type, property, houseNumber);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
         // solve cells with only one option left
         {
             const cells = this.cells.filter(c => !c.value);
@@ -263,5 +309,16 @@ class NakedPairSolution extends Solution {
         this.cell1 = Solution.toRaw(cell1);
         this.cell2 = Solution.toRaw(cell2);
         this.options = options;
+    }
+}
+
+class LockedCandidateSolution extends Solution {
+    constructor(cell, value, type, intersectionType, intersectionNumber) {
+        super();
+        this.cell = Solution.toRaw(cell);
+        this.value = value;
+        this.type = type;
+        this.intersectionType = intersectionType;
+        this.intersectionNumber = intersectionNumber;
     }
 }

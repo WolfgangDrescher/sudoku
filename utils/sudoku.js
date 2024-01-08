@@ -231,18 +231,12 @@ export class Sudoku {
                                     const houseNumber = uniqueValues[0];
                                     const getterFn = `get${property[0].toUpperCase()}${property.substring(1)}`;
                                     const emptyHouseCells = this[getterFn](houseNumber).filter(c => !c.value);
-                                    for (let cell of emptyHouseCells) {
-                                        if (cell[type] !== unitNumber) {
-                                            if (this.getCellOptions(cell).includes(option)) { // cell.options
-                                                // cell.removeOption(option);
-                                                const filteredOptions = this.getCellOptions(cell).filter(o => o !== option);
-                                                if (filteredOptions.length === 1) {
-                                                    cell.resolved = filteredOptions[0];
-                                                    this.calcOptions();
-                                                    if (exit) return new LockedCandidateSolution(cell, filteredOptions[0], type, property, houseNumber);
-                                                }
-                                            }
+                                    const changeEmptyHouseCells = emptyHouseCells.filter(cell => cell[type] !== unitNumber && cell.options.includes(option));
+                                    if (changeEmptyHouseCells.length > 0) {
+                                        for (let cell of changeEmptyHouseCells) {
+                                            cell.removeOption(option);        
                                         }
+                                        if (exit) return new LockedCandidateSolution(option, type, property, changeEmptyHouseCells);
                                     }
                                 }
                             }
@@ -364,12 +358,11 @@ class NakedPairSolution extends Solution {
 }
 
 class LockedCandidateSolution extends Solution {
-    constructor(cell, value, type, intersectionType, intersectionNumber) {
+    constructor(option, type, intersectionType, cells) {
         super();
-        this.cell = Solution.toRaw(cell);
-        this.value = value;
+        this.option = option;
         this.type = type;
         this.intersectionType = intersectionType;
-        this.intersectionNumber = intersectionNumber;
+        this.cells = cells.map(c => Solution.toRaw(c));
     }
 }

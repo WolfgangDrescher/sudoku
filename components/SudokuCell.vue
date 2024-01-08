@@ -1,5 +1,6 @@
 <script setup>
 const value = defineModel();
+defineEmits(['toggleOption'])
 const props = defineProps({
     cell: Object,
     showOptions: Boolean,
@@ -30,7 +31,7 @@ const displayHighlightNumber = computed(() => {
             }">
                 {{ cell.value }}
             </div>
-            <input v-else v-model.number="value" class="absolute w-full h-full z-10 bg-transparent text-center text-6xl text-purple-500" />
+            <input v-else v-model.number="value" class="absolute w-full h-full z-10 bg-transparent text-center text-6xl text-purple-500" :class="showOptions && 'pointer-events-none'"/>
             <div class="absolute w-full h-full">
                 <template v-if="displayHighlightNumber">
                     <div v-if="blockHasNumber || rowHasNumber || colHasNumber || cell.value !== null" class="w-full h-full bg-red-500/10 absolute left-0 top-0"></div>
@@ -41,12 +42,12 @@ const displayHighlightNumber = computed(() => {
                 <div v-if="highlightNakedSingle" class="w-full h-full bg-green-500/10 absolute left-0 top-0"></div>
                 <div v-if="showOptions && !cell.value" class="grid grid-cols-3">
                     <div v-for="n in 9" class="aspect-w-1 aspect-h-1">
-                        <div class="w-full h-full flex items-center justify-center" :class="{
+                        <button class="w-full h-full flex items-center justify-center" :class="{
                             'text-red-500': !cell.options.includes(n),
                             'text-green-500': cell.options.includes(n),
-                        }">
+                        }" @click="$emit('toggleOption', n)">
                             {{ n }}
-                        </div>
+                        </button>
                     </div>
                 </div>
             </div>

@@ -306,6 +306,14 @@ class Cell {
         this.options = this.options.filter(n => n !== num);
     }
 
+    toggleOption(num) {
+        if (this.options.includes(num)) {
+            this.options = this.options.filter(n => n !== num);
+        } else {
+            this.options.push(num);
+        }
+    }
+
     static createOptions() {
         return [1, 2, 3, 4, 5, 6, 7, 8, 9];
     }

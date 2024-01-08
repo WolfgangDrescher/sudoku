@@ -48,6 +48,7 @@ function validate() {
                 :block-has-number="sudoku.blockHasNumber(Sudoku.getBlockNumber(row, col), highlightNumber)"
                 :show-options="showOptions"
                 :value="sudoku.getCell(row, col).input" @update:modelValue="sudoku.getCell(row, col).input = $event; sudoku.resetCellOptions(sudoku.getCell(row, col)); sudoku.calcOptions();"
+                @toggle-option="sudoku.getCell(row, col).toggleOption($event)"
             />
           </template>
         </div>

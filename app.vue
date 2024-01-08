@@ -42,7 +42,7 @@ function validate() {
                 v-for="col in 9"
                 :cell="sudoku.getCell(row, col)"
                 :highlight-number="highlightNumber"
-                :highlight-naked-single="highlightNakedSingle && sudoku.getCell(row, col).options.length === 1"
+                :highlight-naked-single="highlightNakedSingle"
                 :row-has-number="sudoku.rowHasNumber(row, highlightNumber)"
                 :col-has-number="sudoku.colHasNumber(col, highlightNumber)"
                 :block-has-number="sudoku.blockHasNumber(Sudoku.getBlockNumber(row, col), highlightNumber)"

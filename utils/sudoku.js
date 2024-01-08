@@ -19,6 +19,12 @@ export class Sudoku {
         });
     }
 
+    ressetOptions() {
+        this.cells.forEach((cell) => {
+            this.resetCellOptions(cell);
+        });
+    }
+
     resetCellOptions(cell) {
         if (cell.value) {
             cell.options = [];

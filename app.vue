@@ -18,6 +18,10 @@ function solveNext() {
 function solve() {
     sudoku.value.solve();
 }
+
+function resetOptions() {
+    sudoku.value.ressetOptions();
+}
 </script>
 
 <template>
@@ -45,6 +49,9 @@ function solve() {
             </div>
             <div>
                 <button @click="solveNext">Solve next</button>
+            </div>
+            <div>
+                <button @click="resetOptions">Reset options</button>
             </div>
             <div>
                 <button @click="solve">Solve</button>

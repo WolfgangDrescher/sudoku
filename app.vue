@@ -40,7 +40,7 @@ function validate() {
               <SudokuCell
                 v-for="col in 9"
                 :cell="sudoku.getCell(row, col)"
-                :highlightNumber="highlightNumber"
+                :highlight-number="highlightNumber"
                 :row-has-number="sudoku.rowHasNumber(row, highlightNumber)"
                 :col-has-number="sudoku.colHasNumber(col, highlightNumber)"
                 :block-has-number="sudoku.blockHasNumber(Sudoku.getBlockNumber(row, col), highlightNumber)"

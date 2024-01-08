@@ -19,6 +19,17 @@ export class Sudoku {
         });
     }
 
+    resetCellOptions(cell) {
+        if (cell.value) {
+            cell.options = [];
+        } else {
+            cell.options = Cell.createOptions();
+            this.getRow(cell.row).forEach(c => cell.removeOption(c.value));
+            this.getCol(cell.col).forEach(c => cell.removeOption(c.value));
+            this.getBlock(cell.block).forEach(c => cell.removeOption(c.value));
+        }
+    }
+
     getCell(row, col) {
         return this.cells.find((cell) => cell.row === row && cell.col === col);
     }

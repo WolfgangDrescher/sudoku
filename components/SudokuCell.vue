@@ -1,4 +1,5 @@
 <script setup>
+const value = defineModel();
 const props = defineProps({
     cell: Object,
     showOptions: Boolean,
@@ -22,12 +23,13 @@ const displayHighlightNumber = computed(() => {
             'border-b-4 border-b-gray-300': cell.row % 3 === 0 && cell.row < 9,
             'border-r-4 border-r-gray-300': cell.col % 3 === 0 && cell.col < 9,
         }">
-            <div class="text-6xl" :class="{
+            <div v-if="cell.given || cell.resolved" class="text-6xl" :class="{
                 'font-bold': cell.value === cell.given,
                 'text-blue-500': cell.value === cell.resolved,
             }">
                 {{ cell.value }}
             </div>
+            <input v-else v-model.number="value" class="absolute w-full h-full z-10 bg-transparent text-center text-6xl text-purple-500" />
             <div class="absolute w-full h-full">
                 <template v-if="displayHighlightNumber">
                     <div v-if="blockHasNumber || rowHasNumber || colHasNumber || cell.value !== null" class="w-full h-full bg-red-500/10 absolute left-0 top-0"></div>

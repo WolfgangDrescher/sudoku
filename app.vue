@@ -32,6 +32,7 @@ function solve() {
                 :col-has-number="sudoku.colHasNumber(col, highlightNumber)"
                 :block-has-number="sudoku.blockHasNumber(Sudoku.getBlockNumber(row, col), highlightNumber)"
                 :show-options="showOptions"
+                :value="sudoku.getCell(row, col).input" @update:modelValue="sudoku.getCell(row, col).input = $event; sudoku.resetCellOptions(sudoku.getCell(row, col)); sudoku.calcOptions();"
             />
           </template>
         </div>

@@ -36,6 +36,32 @@ export class Sudoku {
         }
     }
 
+    throwError() {
+        this.cells.forEach((cell) => {
+            if (cell.input) {
+                cell.options = Cell.createOptions();
+                [
+                    ['row', this.getRow(cell.row)],
+                    ['col', this.getCol(cell.col)],
+                    ['block', this.getBlock(cell.block)],
+                ].forEach(([type, cells]) => {
+                    cells.forEach(c => {
+                        if (c.id !== cell.id && c.value === cell.value) throw new Error(`Error in ${type} ${cell[type]} with value ${cell.value}`);
+                    })
+                });
+            }
+        });
+    }
+
+    get isValid() {
+        try {
+            this.throwError();
+            return true;
+        } catch(e) {
+            return false;
+        }
+    }
+
     getCell(row, col) {
         return this.cells.find((cell) => cell.row === row && cell.col === col);
     }

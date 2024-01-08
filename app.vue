@@ -27,6 +27,10 @@ function solve() {
 function resetOptions() {
     sudoku.value.ressetOptions();
 }
+
+function validate() {
+    sudoku.value.throwError();
+}
 </script>
 
 <template>
@@ -59,7 +63,13 @@ function resetOptions() {
                 <button @click="resetOptions">Reset options</button>
             </div>
             <div>
+                <button @click="validate">Validate</button>
+            </div>
+            <div>
                 <button @click="solve">Solve</button>
+            </div>
+            <div>
+                <div class="w-4 h-4 rounded-full" :class="sudoku.isValid ? 'bg-green-500' : 'bg-red-500'"></div>
             </div>
         </div>
     </div>
